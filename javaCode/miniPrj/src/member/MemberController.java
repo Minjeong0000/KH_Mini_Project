@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import cart.CartController;
 import main.Main;
 import util.JDBCTemplate;
 
@@ -106,9 +107,9 @@ public class MemberController {
 		System.out.println("1. 비밀번호 변경");
 		System.out.println("2. 주소 변경");
 		System.out.println("3. 전화번호 변경");
-		System.out.println("4. 로그아웃");
-		System.out.println("5. 회원탈퇴");
-//		System.out.println("4.장바구니 보기");
+		System.out.println("4. 장바구니");
+		System.out.println("5. 로그아웃");
+		System.out.println("6. 회원탈퇴");
 
 		System.out.println("메뉴 번호 선택: ");
 		String num = util.JDBCTemplate.SC.nextLine();
@@ -125,16 +126,55 @@ public class MemberController {
 			changePhone();
 			break;
 		case "4":
+			showCart();
+			 break;
+		case "5":
 			logout();
 			break;
-		case "5":
+		case "6":
 			quit();
 			break;
-//		case "4" :로그인한상태에서 주문 등등 메소드 이어붙이기 break;
 		default:
 			System.out.println("잘못 입력하셨습니다");
 		}
 	}
+	
+	private void showCart() throws Exception {
+		CartController cc = new CartController();
+		
+		System.out.println(Main.loginMember.getNick() + "님의 장바구니");
+		
+		Connection conn = JDBCTemplate.getConn();
+		
+		String sql = "SELECT B.BEV_NAME NAME , C.BEV_COUNT COUNT , C.BEV_SUM SUM , C.BEV_REQUEST REQUEST FROM BEVERAGE_CART C JOIN BEVERAGE B ON (C.BEV_NO = B.BEV_NO) UNION SELECT F.FOOD_NAME NAME , C.FOOD_COUNT COUNT , C.FOOD_SUM SUM , C.FOOD_REQUEST REQUEST FROM FOOD_CART C JOIN FOOD F ON (C.FOOD_NO = F.FOOD_NO) UNION SELECT M.MD_NAME NAME , C.MD_COUNT COUNT , C.MD_SUM SUM , C.MD_REQUEST REQUEST FROM MERCHANDISE_CART C JOIN MERCHANDISE M ON (C.MD_NO = M.MD_NO)";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+		
+		while(rs.next()) {
+			String name = rs.getString("NAME");
+			int count = rs.getInt("COUNT");
+			int sum = rs.getInt("SUM");
+			String request = rs.getString("REQUEST");
+			
+			System.out.println("상품명 : " + name);
+			System.out.println("수량 : " + count);
+			System.out.println("가격 : " + sum);
+			System.out.println("요청사항 : " + request);
+		}
+		System.out.println("===== 장바구니 메뉴 =====");
+		System.out.println("0. 뒤로가기");
+		System.out.println("1. 주문하기");
+		System.out.println("2. 비우기");
+	
+		System.out.print("메뉴 번호 입력: ");
+		String num = JDBCTemplate.SC.nextLine();
+		switch(num) {
+		case "0": return ;
+		case "1": System.out.println("주문했다."); break;
+		case "2": cc.emptyCart(); break;
+		default: System.out.println("잘못된 입력입니다. 뒤로갑니다."); return ;
+		}
+	} // showCart
 
 	private void changePwd() throws Exception {
 		Connection conn = JDBCTemplate.getConn();

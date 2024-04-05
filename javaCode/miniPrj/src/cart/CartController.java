@@ -109,4 +109,74 @@ public class CartController {
 		Main.selectMerchandise = null;
 		conn.commit();
 	} // md
+	
+	public void emptyCart() throws Exception {
+		Connection conn = JDBCTemplate.getConn();
+		
+		// Bev 카트 비우기
+		try {
+			if(Main.selectBeverage != null) {
+				String sql1 = "DELETE FROM BEVERAGE_CART";
+				PreparedStatement pstmt1 = conn.prepareStatement(sql1);
+				pstmt1.execute();
+				
+				// 시퀀스 삭제
+				String sql2 = "DROP SEQUENCE SEQ_BEVERAGE_CART_NO";
+				PreparedStatement  pstmt2 = conn.prepareStatement(sql2);
+				pstmt2.execute();
+				
+				// 시퀀스 생성
+				String sql3 = "CREATE SEQUENCE SEQ_BEVERAGE_CART_NO NOCACHE NOCYCLE";
+				PreparedStatement pstmt3 = conn.prepareStatement(sql3);
+				pstmt3.execute();
+			}
+		} catch (Exception e) {
+			System.out.println("음료 장바구니 비우기 실패");
+		}
+		
+		// Food 카트 비우기
+		try {
+			if(Main.selectFood != null) {
+				String sql1 = "DELETE FROM FOOD_CART";
+				PreparedStatement pstmt1 = conn.prepareStatement(sql1);
+				pstmt1.executeUpdate();
+				
+				// 시퀀스 삭제
+				String sql2 = "DROP SEQUENCE SEQ_FOOD_CART_NO";
+				PreparedStatement  pstmt2 = conn.prepareStatement(sql2);
+				pstmt2.executeUpdate();
+				
+				// 시퀀스 생성
+				String sql3 = "CREATE SEQUENCE SEQ_FOOD_CART_NO NOCACHE NOCYCLE";
+				PreparedStatement pstmt3 = conn.prepareStatement(sql3);
+				pstmt3.executeUpdate();
+			}
+		}catch (Exception e) {
+			System.out.println("푸드 장바구니 비우기 실패");
+		}
+		
+		// MD 카트 비우기
+		try {
+			if(Main.selectMerchandise != null) {
+				String sql1 = "DELETE FROM MERCHANDISE_CART";
+				PreparedStatement pstmt1 = conn.prepareStatement(sql1);
+				pstmt1.executeUpdate();
+				
+				// 시퀀스 삭제
+				String sql2 = "DROP SEQUENCE SEQ_MERCHANDISE_CART_NO";
+				PreparedStatement  pstmt2 = conn.prepareStatement(sql2);
+				pstmt2.executeUpdate();
+				
+				// 시퀀스 생성
+				String sql3 = "CREATE SEQUENCE SEQ_MERCHANDISE_CART_NO NOCACHE NOCYCLE";
+				PreparedStatement pstmt3 = conn.prepareStatement(sql3);
+				pstmt3.executeUpdate();
+			}
+		}catch (Exception e) {
+			System.out.println("MD 장바구니 비우기 실패");
+		}
+		
+		// 트랜잭션 커밋
+		conn.commit();
+	} // emptyCart
 } // class

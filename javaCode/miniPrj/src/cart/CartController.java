@@ -8,19 +8,23 @@ import util.JDBCTemplate;
 
 public class CartController {
 
-	public void foodCart() throws Exception {
+	public void foodCart(String num) throws Exception {
 		Connection conn = JDBCTemplate.getConn();
 
 		String sql = "INSERT INTO FOOD_CART ( FOOD_CART_NO , MEMBER_NO , FOOD_NO , FOOD_COUNT , FOOD_SUM , FOOD_REQUEST)VALUES (SEQ_FOOD_CART_NO.NEXTVAL, ? , ? , ? , ? , ?)";
 
-		System.out.print("메뉴 번호 : ");
-		String num = JDBCTemplate.SC.nextLine();
 		System.out.print("메뉴 수량 : ");
 		String count = JDBCTemplate.SC.nextLine();
 		System.out.print("요청사항 : ");
 		String request = JDBCTemplate.SC.nextLine();
-		String sum = Main.selectFood.getFoodPrice();
+		
+		// 회원번호
 		String no = Main.loginMember.getMemberNo();
+		// 상품 한 개 가격
+		String price = Main.selectFood.getFoodPrice();
+		// 상품 총 가격: price * count
+		int sumInt = Integer.parseInt(count) * Integer.parseInt(price);
+		String sum = Integer.toString(sumInt);
 
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		pstmt.setString(1, no); // 첫번째 물음표 유저 No 넘겨야함(로그인 한 유저
@@ -38,19 +42,23 @@ public class CartController {
 		conn.commit();
 	} // food
 	
-	public void beverageCart() throws Exception {
+	public void beverageCart(String num) throws Exception {
 		Connection conn = JDBCTemplate.getConn();
 
-		String sql = "";
+		String sql = "INSERT INTO BEVERAGE_CART ( BEVERAGE_CART_NO , MEMBER_NO , BEV_NO , BEV_COUNT , BEV_SUM , BEV_REQUEST ) VALUES ( SEQ_BEVERAGE_CART_NO.NEXTVAL , ? , ? , ? , ? , ? )";
 
-		System.out.print("메뉴 번호 : ");
-		String num = JDBCTemplate.SC.nextLine();
 		System.out.print("메뉴 수량 : ");
 		String count = JDBCTemplate.SC.nextLine();
 		System.out.print("메뉴 요청사항 : ");
 		String request = JDBCTemplate.SC.nextLine();
-		String sum = Main.selectBeverage.getBevPrice();
+
+		// 회원번호
 		String no = Main.loginMember.getMemberNo();
+		// 상품 한 개 가격
+		String price = Main.selectBeverage.getBevPrice();
+		// 상품 총 가격: price * count
+		int sumInt = Integer.parseInt(count) * Integer.parseInt(price);
+		String sum = Integer.toString(sumInt);
 
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		pstmt.setString(1, no); // 유저 No 넘겨야함
@@ -68,19 +76,23 @@ public class CartController {
 		conn.commit();
 	} // beverage
 	
-	public void mdCart() throws Exception {
+	public void mdCart(String num) throws Exception {
 		Connection conn = JDBCTemplate.getConn();
 
-		String sql = "";
+		String sql = "INSERT INTO MERCHANDISE_CART ( MERCHANDISE_CART_NO , MEMBER_NO , MD_NO , MD_COUNT , MD_SUM , MD_REQUEST ) VALUES ( SEQ_MERCHANDISE_CART_NO.NEXTVAL , ? , ? , ? , ? , ? )";
 
-		System.out.print("상품 번호 : ");
-		String num = JDBCTemplate.SC.nextLine();
 		System.out.print("상품 수량 : ");
 		String count = JDBCTemplate.SC.nextLine();
 		System.out.print("상품 요청사항 : ");
 		String request = JDBCTemplate.SC.nextLine();
-		String sum = Main.selectMerchandise.getMdPrice();
+		
+		// 회원번호
 		String no = Main.loginMember.getMemberNo();
+		// 상품 한 개 가격
+		String price = Main.selectMerchandise.getMdPrice();
+		// 상품 총 가격: price * count
+		int sumInt = Integer.parseInt(count) * Integer.parseInt(price);
+		String sum = Integer.toString(sumInt);
 
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		pstmt.setString(1, no); // 유저 No 넘겨야함

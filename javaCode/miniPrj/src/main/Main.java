@@ -38,10 +38,10 @@ public class Main {
 				case "2": lc.printMenu(); break;
 				case "3":
 					// 로그인 후 이용 가능하게
-//					if(loginMember == null) {
-//						System.out.println("로그인 후 주문 가능합니다.");
-//						break;
-//					}
+					if(loginMember == null) {
+						System.out.println("로그인 후 주문 가능합니다.");
+						break;
+					}
 					
 					// 지역 선택했는지 확인
 					if(selectLocation == null) {

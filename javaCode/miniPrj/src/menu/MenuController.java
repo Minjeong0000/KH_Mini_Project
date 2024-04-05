@@ -105,7 +105,7 @@ public class MenuController {
 			if(cnt == select) {
 				Main.selectBeverage = x;
 				System.out.println(Main.selectBeverage);
-				cc.beverageCart();
+				cc.beverageCart(Main.selectBeverage.getBevNo());
 				return ;
 			}
 			cnt++;
@@ -183,7 +183,7 @@ public class MenuController {
 			if(cnt == select) {
 				Main.selectFood = x;
 				System.out.println(Main.selectFood);
-				cc.foodCart();
+				cc.foodCart(Main.selectFood.getFoodNo());
 				return ;
 			}
 			cnt++;
@@ -261,7 +261,7 @@ public class MenuController {
 			if(cnt == select) {
 				Main.selectMerchandise = x;
 				System.out.println(Main.selectMerchandise);
-				cc.mdCart();
+				cc.mdCart(Main.selectMerchandise.getMdNo());
 				return ;
 			}
 			cnt++;

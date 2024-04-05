@@ -41,8 +41,6 @@ public class Main {
 					} else {
 						mc.printMenu();
 					} break;
-					
-					// 로그인 후 메뉴
 				case "2": lc.printMenu(); break;
 				case "3":
 					// 로그인 후 이용 가능하게

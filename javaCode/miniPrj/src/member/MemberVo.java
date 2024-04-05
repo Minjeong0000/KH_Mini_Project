@@ -9,15 +9,10 @@ public class MemberVo {
 	private String memberAddress;
 	private String memberDelYn;
 	
-	
 	public MemberVo() {
-		super();
-		// TODO Auto-generated constructor stub
 	}
-	
 	public MemberVo(String memberNo, String id, String pwd, String nick, String phone, String memberAddress,
 			String memberDelYn) {
-		super();
 		this.memberNo = memberNo;
 		this.id = id;
 		this.pwd = pwd;
@@ -27,10 +22,15 @@ public class MemberVo {
 		this.memberDelYn = memberDelYn;
 	}
 	
+	@Override
+	public String toString() {
+		return "MemberVo [memberNo=" + memberNo + ", id=" + id + ", pwd=" + pwd + ", nick=" + nick + ", phone=" + phone
+				+ ", memberAddress=" + memberAddress + ", memberDelYn=" + memberDelYn + "]";
+	}
+	
 	public String getMemberNo() {
 		return memberNo;
 	}
-	
 	public void setMemberNo(String memberNo) {
 		this.memberNo = memberNo;
 	}
@@ -70,11 +70,4 @@ public class MemberVo {
 	public void setMemberDelYn(String memberDelYn) {
 		this.memberDelYn = memberDelYn;
 	}
-	@Override
-	public String toString() {
-		return "MemberVo [memberNo=" + memberNo + ", id=" + id + ", pwd=" + pwd + ", nick=" + nick + ", phone=" + phone
-				+ ", memberAddress=" + memberAddress + ", memberDelYn=" + memberDelYn + "]";
-	}
-	
-	
 }

@@ -1,12 +1,20 @@
 package main;
 
 import location.LocationController;
+import location.LocationVo;
 import member.MemberController;
 import member.MemberVo;
+import menu.BeverageVo;
+import menu.FoodVo;
 import menu.MenuController;
+import menu.MerchandiseVo;
 
 public class Main {
 	public static MemberVo loginMember = null;
+	public static LocationVo selectLocation = null;
+	public static BeverageVo selectBeverage = null;
+	public static FoodVo selectFood = null;
+	public static MerchandiseVo selectMerchandise = null;
 	
 	public static void main(String[] args) {
 		MemberController mc = new MemberController();
@@ -28,7 +36,18 @@ public class Main {
 				case "0": System.out.println("프로그램 종료"); return;
 				case "1": mc.printMenu(); break;
 				case "2": lc.printMenu(); break;
-				case "3": lc.selectLocationOne(); break;
+				case "3":
+					// 로그인 후 이용 가능하게
+//					if(loginMember == null) {
+//						System.out.println("로그인 후 주문 가능합니다.");
+//						break;
+//					}
+					
+					// 지역 선택했는지 확인
+					if(selectLocation == null) {
+						lc.showAllLocation(); break;
+					}
+					fc.printMenu(); break;
 				default: System.out.println("잘못된 입력입니다."); break;
 				}
 			}
@@ -36,14 +55,5 @@ public class Main {
 			System.out.println("예외 발생");
 			e.printStackTrace();
 		}
-	
-//		System.out.print("주문하려면 1을, 종료하려면 0을 입력하세요: ");
-//		String num = util.JDBCTemplate.SC.nextLine();
-//		
-//		switch(num) {
-//		case "0": System.out.println("프로그램 종료."); return;
-//		case "1": fc.printMenu(); break;
-//		default: System.out.println("잘못된 입력입니다.");
-//		}
 	} // main
 } // class

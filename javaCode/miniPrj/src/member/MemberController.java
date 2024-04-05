@@ -27,7 +27,6 @@ public class MemberController {
 			return;
 		default:
 			System.out.println("잘못 입력하셨습니다.");
-
 		}
 	} // printMenu method
 
@@ -100,9 +99,6 @@ public class MemberController {
 		}
 		System.out.println(vo.getNick() + "님 환영합니다.");
 		Main.loginMember = vo;
-
-		// 로그인한 다음 메뉴(닉변,)보여주는 메서드
-		printMenuAfterLogin();
 	}
 
 	private void printMenuAfterLogin() throws Exception {
@@ -135,7 +131,6 @@ public class MemberController {
 		default:
 			System.out.println("잘못 입력하셨습니다");
 		}
-
 	}
 
 	private void changePwd() throws Exception {
@@ -156,7 +151,6 @@ public class MemberController {
 		}
 		System.out.println("비밀번호 변경 성공");
 		conn.commit();
-
 	}
 	
 	// 주소변경 메서드
@@ -177,7 +171,6 @@ public class MemberController {
 		}
 		System.out.println("주소 변경 성공");
 		conn.commit();
-		
 	}
 	
 	// 전화번호 변경 메서드

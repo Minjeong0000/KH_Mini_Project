@@ -6,16 +6,17 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.Main;
 import util.JDBCTemplate;
 
 public class LocationController {
 	private List<LocationVo> locationList = new ArrayList<>();
 
 	public void printMenu() throws Exception {
-		System.out.println("----매장조회----");
-		System.out.println("0.뒤로가기");
-		System.out.println("1.전체 매장 조회");
-		System.out.println("2.근처 매장 조회");
+		System.out.println("----- 매장조회 -----");
+		System.out.println("0. 뒤로가기");
+		System.out.println("1. 전체 매장 조회");
+		System.out.println("2. 근처 매장 조회");
 
 		System.out.print("메뉴 번호 입력 : ");
 		String num = util.JDBCTemplate.SC.nextLine();
@@ -30,9 +31,8 @@ public class LocationController {
 		case "0":
 			System.out.println("돌아가기");
 			return;
-
 		default:
-			System.out.println("잘 못 입력했습니다.");
+			System.out.println("잘못 입력했습니다.");
 		}
 	} // pm
 
@@ -66,7 +66,6 @@ public class LocationController {
 			lv.setLocationExpoYn(locationExpoYn);
 
 			locationList.add(lv); // 리스트에 추가합니다
-
 		}
 		for (LocationVo lv : locationList) {
 			System.out.println("========================");
@@ -87,7 +86,7 @@ public class LocationController {
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		ResultSet rs = pstmt.executeQuery();
 
-		locationList = new ArrayList<>();
+		ArrayList<LocationVo> lvList = new ArrayList<LocationVo>();
 
 		while (rs.next()) {
 			LocationVo lv = new LocationVo();
@@ -96,20 +95,15 @@ public class LocationController {
 			String branchName = rs.getString("BRANCH_NAME");
 			String distance = rs.getString("DISTANCE");
 			String telephone = rs.getString("TELEPHONE");
-			String locationDelYn = rs.getString("LOCATION_DEL_YN");
-			String locationExpoYn = rs.getString("LOCATION_EXPO_YN");
 
 			lv.setLocationNo(locationNo);
 			lv.setBranchName(branchName);
 			lv.setDistance(distance);
 			lv.setTelephone(telephone);
-			lv.setLocationDelYn(locationDelYn);
-			lv.setLocationExpoYn(locationExpoYn);
 
-			locationList.add(lv); // 리스트에 추가합니다
-
+			lvList.add(lv); // 리스트에 추가합니다
 		}
-		for (LocationVo lv : locationList) {
+		for (LocationVo lv: lvList) {
 			System.out.println("========================");
 			System.out.println("번호 : " + lv.getLocationNo());
 			System.out.println("매장이름 : " + lv.getBranchName());
@@ -119,49 +113,67 @@ public class LocationController {
 		}
 	}
 	
-	private void showAllLocation() throws Exception {
+	public void showAllLocation() throws Exception {
 		// conn
-				Connection conn = JDBCTemplate.getConn();
-				
-				// SQL
-				String sql = "SELECT LOCATION_NO , BRANCH_NAME , DISTANCE FROM LOCATION";
-				PreparedStatement pstmt = conn.prepareStatement(sql);
-				ResultSet rs = pstmt.executeQuery();
-				
-				// rs
-				ArrayList<LocationVo> locationVoList = new ArrayList<LocationVo>();
-				LocationVo vo = null;
-				
-				while(rs.next()) {
-					String locationNo = rs.getString("LOCATION_NO");
-					String branchName = rs.getString("BRANCH_NAME");
-					String distance = rs.getString("DISTANCE");
+		Connection conn = JDBCTemplate.getConn();
+		
+		// SQL
+		String sql = "SELECT * FROM LOCATION";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();
+		
+		// rs
+		ArrayList<LocationVo> lvList = new ArrayList<LocationVo>();
+		LocationVo vo = null;
+		
+		while(rs.next()) {
+			String locationNo = rs.getString("LOCATION_NO");
+			String branchName = rs.getString("BRANCH_NAME");
+			String distance = rs.getString("DISTANCE");
+			String telephone = rs.getString("TELEPHONE");
+			String locationDelYn = rs.getString("LOCATION_DEL_YN");
+			String locationExpoYn = rs.getString("LOCATION_EXPO_YN");
 
-					vo = new LocationVo();
-					
-					vo.setLocationNo(locationNo);
-					vo.setBranchName(branchName);
-					vo.setDistance(distance);
-					
-					locationVoList.add(vo);
-				}
-				
-				System.out.println("------------------------------");
-				System.out.print("지점번호");
-				System.out.print(" | ");
-				System.out.print("지점명");
-				System.out.print(" | ");
-				System.out.print("거리");
-				System.out.println();
-				for (LocationVo x: locationVoList) {
-					System.out.print(x.getLocationNo());
-					System.out.print(" | ");
-					System.out.print(x.getBranchName());
-					System.out.print(" | ");
-					System.out.print(x.getDistance());
-					System.out.println();
-				}
-				System.out.println("------------------------------");
+			vo = new LocationVo();
+			
+			vo.setLocationNo(locationNo);
+			vo.setBranchName(branchName);
+			vo.setDistance(distance);
+			vo.setTelephone(telephone);
+			vo.setLocationDelYn(locationDelYn);
+			vo.setLocationExpoYn(locationExpoYn);
+			
+			lvList.add(vo);
+		}
+		
+		System.out.println("------------------------------");
+		System.out.print("지점번호");
+		System.out.print(" | ");
+		System.out.print("지점명");
+		System.out.print(" | ");
+		System.out.print("거리");
+		System.out.println();
+		for (LocationVo x: lvList) {
+			System.out.print(x.getLocationNo());
+			System.out.print(" | ");
+			System.out.print(x.getBranchName());
+			System.out.print(" | ");
+			System.out.print(x.getDistance());
+			System.out.println();
+		}
+		System.out.println("------------------------------");
+		
+		System.out.print("주문할 매장 번호 입력: ");
+		int select = Integer.parseInt(util.JDBCTemplate.SC.nextLine());
+		int cnt = 1;
+		
+		for (LocationVo x: lvList) {
+			if(cnt == select) {
+				Main.selectLocation = x;
+				break;
+			}
+			cnt++;
+		}
 	} // selectLocationList
 			
 	public void selectLocationOne() throws Exception {

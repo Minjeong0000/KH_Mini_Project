@@ -1,6 +1,6 @@
 package main;
 
-import location.LocationControl;
+import location.LocationController;
 import member.MemberController;
 import member.MemberVo;
 import menu.MenuController;
@@ -10,7 +10,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		MemberController mc = new MemberController();
-		LocationControl lc =new LocationControl();
+		LocationController lc =new LocationController();
 		MenuController fc = new MenuController();
 		
 		System.out.println("===== MINI PROJECT =====");

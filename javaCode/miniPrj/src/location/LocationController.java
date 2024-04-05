@@ -7,10 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import util.JDBCTemplate;
-import main.Main;
-import oracle.jdbc.oracore.Util;
 
-public class LocationControl {
+public class LocationController {
 	private List<LocationVo> locationList = new ArrayList<>();
 
 	public void printMenu() throws Exception {
@@ -120,6 +118,7 @@ public class LocationControl {
 			System.out.println("========================");
 		}
 	}
+	
 	private void showAllLocation() throws Exception {
 		// conn
 				Connection conn = JDBCTemplate.getConn();

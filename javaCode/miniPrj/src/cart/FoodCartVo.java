@@ -1,6 +1,6 @@
 package cart;
 
-public class FoodCart {
+public class FoodCartVo {
 	private String foodCartNo;
 	private String memberNo;
 	private String foodNo;
@@ -9,9 +9,9 @@ public class FoodCart {
 	private String foodRequest;
 	
 	// Constructor
-	public FoodCart() {
+	public FoodCartVo() {
 	}
-	public FoodCart(String foodCartNo, String memberNo, String foodNo, String foodCount, String foodSum,
+	public FoodCartVo(String foodCartNo, String memberNo, String foodNo, String foodCount, String foodSum,
 			String foodRequest) {
 		this.foodCartNo = foodCartNo;
 		this.memberNo = memberNo;

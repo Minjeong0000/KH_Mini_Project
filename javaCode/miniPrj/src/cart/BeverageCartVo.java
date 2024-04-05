@@ -1,6 +1,6 @@
 package cart;
 
-public class BeverageCart {
+public class BeverageCartVo {
 	private String beverageCartNo;
 	private String memberNo;
 	private String bevNo;
@@ -9,9 +9,9 @@ public class BeverageCart {
 	private String bevRequest;
 	
 	// Constructor
-	public BeverageCart() {
+	public BeverageCartVo() {
 	}
-	public BeverageCart(String beverageCartNo, String memberNo, String bevNo, String bevCount, String bevSum,
+	public BeverageCartVo(String beverageCartNo, String memberNo, String bevNo, String bevCount, String bevSum,
 			String bevRequest) {
 		this.beverageCartNo = beverageCartNo;
 		this.memberNo = memberNo;

@@ -1,6 +1,6 @@
 package cart;
 
-public class MerchandiseCart {
+public class MerchandiseCartVo {
 	private String merchandiseCartNo;
 	private String memberNo;
 	private String mdNo;
@@ -9,9 +9,9 @@ public class MerchandiseCart {
 	private String mdRequest;
 	
 	// Constructor
-	public MerchandiseCart() {
+	public MerchandiseCartVo() {
 	}
-	public MerchandiseCart(String merchandiseCartNo, String memberNo, String mdNo, String mdCount, String mdSum,
+	public MerchandiseCartVo(String merchandiseCartNo, String memberNo, String mdNo, String mdCount, String mdSum,
 			String mdRequest) {
 		super();
 		this.merchandiseCartNo = merchandiseCartNo;

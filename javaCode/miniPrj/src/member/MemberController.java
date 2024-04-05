@@ -11,8 +11,8 @@ public class MemberController {
 	public void printMenu() throws Exception {
 		System.out.println("==============MEMBER=============");
 		System.out.println("0.이전 메뉴로 돌아가기");
-		System.out.println("1.로그인");
-		System.out.println("2.회원가입");
+		System.out.println("1. 로그인");
+		System.out.println("2. 회원가입");
 		System.out.print("메뉴 번호 입력 : ");
 		String num = util.JDBCTemplate.SC.nextLine();
 		switch (num) {
@@ -101,17 +101,20 @@ public class MemberController {
 		Main.loginMember = vo;
 	}
 
-	private void printMenuAfterLogin() throws Exception {
-		System.out.println("1.비밀번호 변경");
-		System.out.println("2.주소 변경");
-		System.out.println("3.전화번호 변경");
-		System.out.println("4.로그아웃");
-		System.out.println("5.회원탈퇴");
+	public void printMenuAfterLogin() throws Exception {
+		System.out.println("0. 뒤로가기");
+		System.out.println("1. 비밀번호 변경");
+		System.out.println("2. 주소 변경");
+		System.out.println("3. 전화번호 변경");
+		System.out.println("4. 로그아웃");
+		System.out.println("5. 회원탈퇴");
 //		System.out.println("4.장바구니 보기");
 
 		System.out.println("메뉴 번호 선택: ");
 		String num = util.JDBCTemplate.SC.nextLine();
 		switch (num) {
+		case "0":
+			return ;
 		case "1":
 			changePwd();
 			break;

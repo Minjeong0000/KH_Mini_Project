@@ -34,7 +34,15 @@ public class Main {
 				
 				switch(num) {
 				case "0": System.out.println("프로그램 종료"); return;
-				case "1": mc.printMenu(); break;
+				case "1":
+					// 로그인 전 메뉴
+					if(loginMember != null) {
+						mc.printMenuAfterLogin();
+					} else {
+						mc.printMenu();
+					} break;
+					
+					// 로그인 후 메뉴
 				case "2": lc.printMenu(); break;
 				case "3":
 					// 로그인 후 이용 가능하게
@@ -45,7 +53,7 @@ public class Main {
 					
 					// 지역 선택했는지 확인
 					if(selectLocation == null) {
-						lc.showAllLocation(); break;
+						lc.showAllLocation();
 					}
 					fc.printMenu(); break;
 				default: System.out.println("잘못된 입력입니다."); break;

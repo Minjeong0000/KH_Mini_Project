@@ -21,9 +21,9 @@ public class Main {
 		LocationController lc =new LocationController();
 		MenuController fc = new MenuController();
 		
-		System.out.println("===== MINI PROJECT =====");
 		try {
 			while(true) {
+				System.out.println("===== MINI PROJECT =====");
 				System.out.println("0. 종료");
 				System.out.println("1. 회원");
 				System.out.println("2. 매장");
@@ -51,10 +51,13 @@ public class Main {
 					
 					// 지역 선택했는지 확인
 					if(selectLocation == null) {
-						lc.showAllLocation();
+						lc.selectLocation();
 					}
-					fc.printMenu(); break;
-				default: System.out.println("잘못된 입력입니다."); break;
+					
+					if(selectLocation != null) {
+						fc.printMenu(); break;
+					}
+				default: System.out.println("잘못된 입력입니다.");
 				}
 			}
 		} catch (Exception e) {

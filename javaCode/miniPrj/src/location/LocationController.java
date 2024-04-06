@@ -18,8 +18,8 @@ public class LocationController {
 		System.out.println("1. 전체 매장 조회");
 		System.out.println("2. 근처 매장 조회");
 
-		System.out.print("메뉴 번호 입력 : ");
-		String num = util.JDBCTemplate.SC.nextLine();
+		System.out.print("메뉴 번호 입력: ");
+		String num = JDBCTemplate.SC.nextLine();
 
 		switch (num) {
 		case "1":
@@ -69,13 +69,13 @@ public class LocationController {
 		}
 		for (LocationVo lv : locationList) {
 			System.out.println("========================");
-			System.out.println("번호 : " + lv.getLocationNo());
-			System.out.println("매장이름 : " + lv.getLocationAddress());
-			System.out.println("매장이름 : " + lv.getBranchName());
-			System.out.println("주소 : " + lv.getDistance());
-			System.out.println("번호 : " + lv.getTelephone());
-			System.out.println("========================");
+			System.out.println("지점번호: " + lv.getLocationNo());
+			System.out.println("지점명: " + lv.getBranchName());
+			System.out.println("지점주소: " + lv.getLocationAddress());
+			System.out.println("거리(단위: m): " + lv.getDistance());
+			System.out.println("전화번호: " + lv.getTelephone());
 		}
+		System.out.println("========================");
 	}
 
 	private void showInitLocation() throws Exception {
@@ -95,25 +95,28 @@ public class LocationController {
 			String branchName = rs.getString("BRANCH_NAME");
 			String distance = rs.getString("DISTANCE");
 			String telephone = rs.getString("TELEPHONE");
+			String locationAddress = rs.getString("LOCATION_ADDRESS");
 
 			lv.setLocationNo(locationNo);
 			lv.setBranchName(branchName);
 			lv.setDistance(distance);
 			lv.setTelephone(telephone);
+			lv.setLocationAddress(locationAddress);
 
 			lvList.add(lv); // 리스트에 추가합니다
 		}
 		for (LocationVo lv: lvList) {
 			System.out.println("========================");
-			System.out.println("번호 : " + lv.getLocationNo());
-			System.out.println("매장이름 : " + lv.getBranchName());
-			System.out.println("주소 : " + lv.getDistance());
-			System.out.println("번호 : " + lv.getTelephone());
-			System.out.println("========================");
+			System.out.println("지점번호: " + lv.getLocationNo());
+			System.out.println("지점명: " + lv.getBranchName());
+			System.out.println("주소: " + lv.getLocationAddress());
+			System.out.println("거리(단위: m): " + lv.getDistance());
+			System.out.println("전화번호: " + lv.getTelephone());
 		}
+		System.out.println("========================");
 	}
 	
-	public void showAllLocation() throws Exception {
+	public void selectLocation() throws Exception {
 		// conn
 		Connection conn = JDBCTemplate.getConn();
 		
@@ -128,6 +131,7 @@ public class LocationController {
 		
 		while(rs.next()) {
 			String locationNo = rs.getString("LOCATION_NO");
+			String locationAddress = rs.getString("LOCATION_ADDRESS");
 			String branchName = rs.getString("BRANCH_NAME");
 			String distance = rs.getString("DISTANCE");
 			String telephone = rs.getString("TELEPHONE");
@@ -140,6 +144,7 @@ public class LocationController {
 			vo.setBranchName(branchName);
 			vo.setDistance(distance);
 			vo.setTelephone(telephone);
+			vo.setLocationAddress(locationAddress);
 			vo.setLocationDelYn(locationDelYn);
 			vo.setLocationExpoYn(locationExpoYn);
 			
@@ -151,7 +156,7 @@ public class LocationController {
 		System.out.print(" | ");
 		System.out.print("지점명");
 		System.out.print(" | ");
-		System.out.print("거리");
+		System.out.print("거리(단위: m)");
 		System.out.println();
 		for (LocationVo x: lvList) {
 			System.out.print(x.getLocationNo());
@@ -163,57 +168,29 @@ public class LocationController {
 		}
 		System.out.println("------------------------------");
 		
-		System.out.print("주문할 매장 번호 입력: ");
-		int select = Integer.parseInt(util.JDBCTemplate.SC.nextLine());
+		System.out.println("(0을 입력하면 뒤로가기)");
+		System.out.print("주문할 지점번호 입력: ");
+		int select = Integer.parseInt(JDBCTemplate.SC.nextLine());
+		
+		if(select == 0) {
+			return ;
+		}
+		
 		int cnt = 1;
 		
 		for (LocationVo x: lvList) {
 			if(cnt == select) {
 				Main.selectLocation = x;
+				System.out.println("--------------------");
+				System.out.println("선택한 지점번호: " + Main.selectLocation.getLocationNo());
+				System.out.println("선택한 지점명: " + Main.selectLocation.getBranchName());
+				System.out.println("선택한 지점주소: " + Main.selectLocation.getLocationAddress());
+				System.out.println("선택한 지점 전화번호: " + Main.selectLocation.getTelephone());
+				System.out.println("--------------------");
+				System.out.println("지점 선택 완료 !!!");
 				break;
 			}
 			cnt++;
 		}
-	} // selectLocationList
-			
-	public void selectLocationOne() throws Exception {
-		// conn
-		Connection conn = JDBCTemplate.getConn();
-		
-		showLocation();
-		
-		System.out.print("주문할 지점번호 입력: ");
-		String num = util.JDBCTemplate.SC.nextLine();
-		
-		// SQL
-		String sql = "SELECT BRANCH_NAME , TELEPHONE , LOCATION_ADDRESS FROM LOCATION WHERE LOCATION_NO = ?";
-		PreparedStatement pstmt = conn.prepareStatement(sql);
-		pstmt.setString(1, num);
-		ResultSet rs = pstmt.executeQuery();
-		
-		// rs
-		LocationVo vo = null;
-		if(rs.next()) {
-			String branchName = rs.getString("BRANCH_NAME");
-			String telephone = rs.getString("TELEPHONE");
-			String locationAddress = rs.getString("LOCATION_ADDRESS");
-			vo = new LocationVo();
-			
-			vo.setBranchName(branchName);
-			vo.setTelephone(telephone);
-			vo.setLocationAddress(locationAddress);
-		}
-		
-		if(vo == null) {
-			System.out.println("매장 상세조회 실패 ...");
-			return ;
-		}
-		
-		System.out.println("매장 상세조회 성공 !!!");
-		System.out.println("---------------");
-		System.out.println("지점명: " + vo.getBranchName());
-		System.out.println("전화번호: " + vo.getTelephone());
-		System.out.println("주소: " + vo.getLocationAddress());
-		System.out.println("---------------");
-	}
+	} // selectLocation
 } // class

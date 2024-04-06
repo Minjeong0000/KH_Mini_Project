@@ -1,8 +1,5 @@
--- 매장 선택 (SELECT)
------ 매장 선택 -----
--- 1. 뭐시기
--- 2. 뭐시기
--- 3. 뭐시기
+----- 3. 주문 -----
+-- 매장 선택
 SELECT
     LOCATION_NO
     , BRANCH_NAME
@@ -10,19 +7,9 @@ SELECT
 FROM LOCATION
 ;
 
--- LOCATION_NO로 선택
 
--- 상품 조회 (SELECT)
------ 상품 조회 -----
--- 1. 음료
--- 2. 음식
--- 3. 상품
--- 번호로 고르기 (자바에서 처리)
 
------ 음료 -----
--- 1. 뭐시기
--- 2. 뭐시기
--- 3. 뭐시기
+-- 상품 선택 (BEVERAGE)
 SELECT
     B.BEV_NO
     , B.BEV_NAME
@@ -33,10 +20,7 @@ FROM BEVERAGE B
 JOIN BEV_CATEGORY C ON B.BEV_CODE = C.BEV_CODE
 ;
 
------ 음식 -----
--- 1. 뭐시기
--- 2. 뭐시기
--- 3. 뭐시기
+-- 상품 선택 (FOOD)
 SELECT
     F.FOOD_NO
     , F.FOOD_NAME
@@ -47,10 +31,7 @@ FROM FOOD F
 JOIN FOOD_CATEGORY C ON F.FOOD_CODE = C.FOOD_CODE
 ;
 
------ 상품 -----
--- 1. 뭐시기
--- 2. 뭐시기
--- 3. 뭐시기
+-- 상품 선택 (MERCHANDISE)
 SELECT
     M.MD_NO
     , M.MD_NAME
@@ -63,9 +44,7 @@ JOIN MD_CATEGORY C ON M.MD_CODE = C.MD_CODE
 
 
 
--- 장바구니 담기 (INSERT) -> 각자 CART에 담기
------ 장바구니 담기 -----
--- BEVERAGE
+-- 장바구니 담기 (BEVERAGE)
 INSERT INTO BEVERAGE_CART (
     BEVERAGE_CART_NO
     , MEMBER_NO
@@ -76,26 +55,7 @@ INSERT INTO BEVERAGE_CART (
 )
 VALUES (
     SEQ_MEMBER_NO.NEXTVAL
-    , 1 -- 
-    , 1 -- 
-    , 1 -- 
-    , ? -- 사용자 입력 (bevCount)
-    , ? -- PRICE * 
-    , ? -- 사용자 입력 (bevRequest)
-);
-
-INSERT INTO FOOD_CART
-(
-    FOOD_CART_NO
-    , MEMBER_NO
-    , FOOD_NO
-    , FOOD_COUNT
-    , FOOD_SUM
-    , FOOD_REQUEST
-)
-VALUES
-(
-    SEQ_FOOD_CART_NO.NEXTVAL
+    , ?
     , ?
     , ?
     , ?
@@ -103,57 +63,7 @@ VALUES
     , ?
 );
 
-SELECT *
-FROM BEVERAGE_CART
-;
-
-INSERT INTO MERCHANDISE_CART
-(
-    MERCHANDISE_CART_NO
-    , MEMBER_NO
-    , MD_NO
-    , MD_COUNT
-    , MD_SUM
-    , MD_REQUEST
-)
-VALUES
-(
-    SEQ_MERCHANDISE_CART_NO.NEXTVAL
-    , ?
-    , ?
-    , ?
-    , ?
-    , ?
-);
-
-INSERT INTO BEVERAGE_CART
-(
-    BEVERAGE_CART_NO
-    , MEMBER_NO
-    , BEV_NO
-    , BEV_COUNT
-    , BEV_SUM
-    , BEV_REQUEST
-)
-VALUES
-(
-    SEQ_BEVERAGE_CART_NO.NEXTVAL
-    , ?
-    , ?
-    , ?
-    , ?
-    , ?
-);
-
-
-
-
-
-
--- 주문 내역 값 넘기기
-
-
--- 카트 담기
+-- 장바구니 담기 (FOOD)
 INSERT INTO FOOD_CART (
     FOOD_CART_NO
     , MEMBER_NO
@@ -171,7 +81,64 @@ VALUES (
     , ?
 );
 
------ 오더하기 -----
+-- 장바구니 담기 (MERCHANDISE)
+INSERT INTO MERCHANDISE_CART (
+    MERCHANDISE_CART_NO
+    , MEMBER_NO
+    , MD_NO
+    , MD_COUNT
+    , MD_SUM
+    , MD_REQUEST
+)
+VALUES (
+    SEQ_MERCHANDISE_CART_NO.NEXTVAL
+    , ?
+    , ?
+    , ?
+    , ?
+    , ?
+);
+
+INSERT INTO ORDER_SHOW (ORDER_NO, MEMBER_NO, LOCATION_NO) VALUES (SEQ_ORDER_SHOW_NO.NEXTVAL, 2, 11);
+
+
+
+----- 장바구니 출력 -----
+SELECT
+    B.BEV_NAME "메뉴명"
+    , C.BEV_NO "상품번호"
+    , C.BEV_COUNT "개수"
+    , C.BEV_SUM "합계"
+    , C.BEV_REQUEST "요청사항"
+FROM BEVERAGE_CART C
+JOIN BEVERAGE B ON (C.BEV_NO = B.BEV_NO)
+
+UNION
+
+SELECT
+    F.FOOD_NAME "메뉴명"
+    , C.FOOD_NO "상품번호"
+    , C.FOOD_COUNT "개수"
+    , C.FOOD_SUM "합계"
+    , C.FOOD_REQUEST "요청사항"
+FROM FOOD_CART C
+JOIN FOOD F ON (C.FOOD_NO = F.FOOD_NO)
+
+UNION
+
+SELECT
+    M.MD_NAME "메뉴명"
+    , C.MD_NO "상품번호"
+    , C.MD_COUNT "개수"
+    , C.MD_SUM "합계"
+    , C.MD_REQUEST "요청사항"
+FROM MERCHANDISE_CART C
+JOIN MERCHANDISE M ON (C.MD_NO = M.MD_NO)
+;
+
+
+
+-- 주문하기 (ORDER_SHOW)
 INSERT INTO ORDER_SHOW (
     ORDER_NO
     , MEMBER_NO
@@ -183,54 +150,38 @@ VALUES (
     , ?
 );
 
------ 오더리스트 넘기기 -----
-INSERT INTO ORDER_LIST (
-    ORDER_LIST_NO
-    , ORDER_NO
-)
-VALUES (
-    SEQ_ORDER_LIST_NO.NEXTVAL
-    , ?
-);
-
-
-
------ 장바구니 출력 -----
+-- 영수증 출력
 SELECT
-    B.BEV_NAME NAME
-    , C.BEV_COUNT COUNT
-    , C.BEV_SUM SUM
-    , C.BEV_REQUEST REQUEST
+    O.ORDER_NO "주문번호"
+    , B.BEV_NAME "상품명"
+    , C.BEV_COUNT "수량"
+    , C.BEV_SUM "가격"
+    , C.BEV_REQUEST "요청사항"
 FROM BEVERAGE_CART C
 JOIN BEVERAGE B ON (C.BEV_NO = B.BEV_NO)
+JOIN ORDER_SHOW O ON (C.MEMBER_NO = O.MEMBER_NO)
 
 UNION
 
 SELECT
-    F.FOOD_NAME NAME
-    , C.FOOD_COUNT COUNT
-    , C.FOOD_SUM SUM
-    , C.FOOD_REQUEST REQUEST
+    O.ORDER_NO "주문번호"
+    , F.FOOD_NAME "상품명"
+    , C.FOOD_COUNT "수량"
+    , C.FOOD_SUM "가격"
+    , C.FOOD_REQUEST "요청사항"
 FROM FOOD_CART C
 JOIN FOOD F ON (C.FOOD_NO = F.FOOD_NO)
+JOIN ORDER_SHOW O ON (C.MEMBER_NO = O.MEMBER_NO)
 
 UNION
 
 SELECT
-    M.MD_NAME NAME
-    , C.MD_COUNT COUNT
-    , C.MD_SUM SUM
-    , C.MD_REQUEST REQUEST
+    O.ORDER_NO "주문번호"
+    , M.MD_NAME "상품명"
+    , C.MD_COUNT "수량"
+    , C.MD_SUM "가격"
+    , C.MD_REQUEST "요청사항"
 FROM MERCHANDISE_CART C
 JOIN MERCHANDISE M ON (C.MD_NO = M.MD_NO)
+JOIN ORDER_SHOW O ON (C.MEMBER_NO = O.MEMBER_NO)
 ;
-
-
-
------ ORDER -----
--- 주문 조회 (SELECT)
-
-
--- 주문 상세 조회 (SELECT)
-SELECT * FROM BOARD ORDER BY NO DESC;
-SELECT * FROM BOARD B JOIN MEMBER M ON M.NO = B.WRITER_NO ORDER BY B.NO DESC;

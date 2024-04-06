@@ -6,16 +6,17 @@ import java.sql.ResultSet;
 
 import cart.CartController;
 import main.Main;
+import order.OrderController;
 import util.JDBCTemplate;
 
 public class MemberController {
 	public void printMenu() throws Exception {
-		System.out.println("==============MEMBER=============");
-		System.out.println("0.이전 메뉴로 돌아가기");
+		System.out.println("============== MEMBER =============");
+		System.out.println("0. 이전 메뉴로 돌아가기");
 		System.out.println("1. 로그인");
 		System.out.println("2. 회원가입");
-		System.out.print("메뉴 번호 입력 : ");
-		String num = util.JDBCTemplate.SC.nextLine();
+		System.out.print("메뉴 번호 입력: ");
+		String num = JDBCTemplate.SC.nextLine();
 		switch (num) {
 		case "1":
 			login();
@@ -34,16 +35,16 @@ public class MemberController {
 	private void join() throws Exception {
 		// conn
 		Connection conn = JDBCTemplate.getConn();
-		System.out.print("아이디 : ");
-		String id = util.JDBCTemplate.SC.nextLine();
-		System.out.print("비밀번호 : ");
-		String pwd = util.JDBCTemplate.SC.nextLine();
-		System.out.print("닉네임 : ");
-		String nick = util.JDBCTemplate.SC.nextLine();
-		System.out.print("전화번호 : ");
-		String phone = util.JDBCTemplate.SC.nextLine();
-		System.out.print("주소 : ");
-		String memberAddress = util.JDBCTemplate.SC.nextLine();
+		System.out.print("아이디: ");
+		String id = JDBCTemplate.SC.nextLine();
+		System.out.print("비밀번호: ");
+		String pwd = JDBCTemplate.SC.nextLine();
+		System.out.print("닉네임: ");
+		String nick = JDBCTemplate.SC.nextLine();
+		System.out.print("전화번호: ");
+		String phone = JDBCTemplate.SC.nextLine();
+		System.out.print("주소: ");
+		String memberAddress = JDBCTemplate.SC.nextLine();
 
 		MemberVo inputVo = new MemberVo();
 		inputVo.setId(id);
@@ -71,10 +72,10 @@ public class MemberController {
 
 	private void login() throws Exception {
 		Connection conn = JDBCTemplate.getConn();
-		System.out.print("아이디 : ");
-		String id = util.JDBCTemplate.SC.nextLine();
-		System.out.print("비밀번호 :  ");
-		String pwd = util.JDBCTemplate.SC.nextLine();
+		System.out.print("아이디: ");
+		String id = JDBCTemplate.SC.nextLine();
+		System.out.print("비밀번호: ");
+		String pwd = JDBCTemplate.SC.nextLine();
 
 		// sql
 		String sql = "SELECT * FROM MEMBER WHERE MEMBER_DEL_YN = 'N' AND ID =? AND PWD =?";
@@ -85,7 +86,7 @@ public class MemberController {
 
 		// rs
 		MemberVo vo = null;
-		if (rs.next()) {// id,pwd 생략한 이유: 로그인 성공하면 위에서 입력한 값이랑 똑같으니까
+		if (rs.next()) {
 			String memberNo = rs.getString("MEMBER_NO");
 			String nick = rs.getString("NICK");
 			String phone = rs.getString("PHONE");
@@ -111,8 +112,8 @@ public class MemberController {
 		System.out.println("5. 로그아웃");
 		System.out.println("6. 회원탈퇴");
 
-		System.out.println("메뉴 번호 선택: ");
-		String num = util.JDBCTemplate.SC.nextLine();
+		System.out.print("메뉴 번호 선택: ");
+		String num = JDBCTemplate.SC.nextLine();
 		switch (num) {
 		case "0":
 			return ;
@@ -141,26 +142,41 @@ public class MemberController {
 	
 	private void showCart() throws Exception {
 		CartController cc = new CartController();
+		OrderController oc = new OrderController();
 		
-		System.out.println(Main.loginMember.getNick() + "님의 장바구니");
 		
 		Connection conn = JDBCTemplate.getConn();
 		
 		String sql = "SELECT B.BEV_NAME NAME , C.BEV_COUNT COUNT , C.BEV_SUM SUM , C.BEV_REQUEST REQUEST FROM BEVERAGE_CART C JOIN BEVERAGE B ON (C.BEV_NO = B.BEV_NO) UNION SELECT F.FOOD_NAME NAME , C.FOOD_COUNT COUNT , C.FOOD_SUM SUM , C.FOOD_REQUEST REQUEST FROM FOOD_CART C JOIN FOOD F ON (C.FOOD_NO = F.FOOD_NO) UNION SELECT M.MD_NAME NAME , C.MD_COUNT COUNT , C.MD_SUM SUM , C.MD_REQUEST REQUEST FROM MERCHANDISE_CART C JOIN MERCHANDISE M ON (C.MD_NO = M.MD_NO)";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		ResultSet rs = pstmt.executeQuery();
-		
+
+		System.out.println(Main.loginMember.getNick() + "님의 장바구니");
+		System.out.println("--------------------");	
+		System.out.print("상품명");
+		System.out.print(" | ");
+		System.out.print("수량");
+		System.out.print(" | ");
+		System.out.print("가격");
+		System.out.print(" | ");
+		System.out.print("요청사항");
+		System.out.println();
+		System.out.println("--------------------");
 		while(rs.next()) {
 			String name = rs.getString("NAME");
 			int count = rs.getInt("COUNT");
 			int sum = rs.getInt("SUM");
 			String request = rs.getString("REQUEST");
 			
-			System.out.println("상품명 : " + name);
-			System.out.println("수량 : " + count);
-			System.out.println("가격 : " + sum);
-			System.out.println("요청사항 : " + request);
+			System.out.print(name);
+			System.out.print(" | ");
+			System.out.print(count);
+			System.out.print(" | ");
+			System.out.print(sum);
+			System.out.print(" | ");
+			System.out.println(request);
 		}
+		System.out.println("--------------------");
 		System.out.println("===== 장바구니 메뉴 =====");
 		System.out.println("0. 뒤로가기");
 		System.out.println("1. 주문하기");
@@ -170,16 +186,16 @@ public class MemberController {
 		String num = JDBCTemplate.SC.nextLine();
 		switch(num) {
 		case "0": return ;
-		case "1": System.out.println("주문했다."); break;
-		case "2": cc.emptyCart(); break;
-		default: System.out.println("잘못된 입력입니다. 뒤로갑니다."); return ;
+		case "1": oc.orderCart(); oc.orderList(); cc.emptyCart(); System.out.println("주문 완료 !!!"); break;
+		case "2": cc.emptyCart(); System.out.println("장바구니 비우기 성공 !!!"); break;
+		default: System.out.println("잘못된 입력입니다."); return ;
 		}
 	} // showCart
 
 	private void changePwd() throws Exception {
 		Connection conn = JDBCTemplate.getConn();
-		System.out.print("바꿀 비밀번호 입력 :");
-		String pwd = util.JDBCTemplate.SC.nextLine();
+		System.out.print("바꿀 비밀번호 입력:");
+		String pwd = JDBCTemplate.SC.nextLine();
 
 		// sql
 		String sql = "UPDATE MEMBER SET PWD = ? WHERE MEMBER_NO = ?";
@@ -199,8 +215,8 @@ public class MemberController {
 	// 주소변경 메서드
 	private void changeMemberAddress() throws Exception{
 		Connection conn = JDBCTemplate.getConn();
-		System.out.print("바꿀 주소 입력 : ");
-		String address = util.JDBCTemplate.SC.nextLine();
+		System.out.print("바꿀 주소 입력: ");
+		String address = JDBCTemplate.SC.nextLine();
 		// sql
 		String sql = "UPDATE MEMBER SET MEMBER_ADDRESS = ? WHERE MEMBER_NO = ?";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -219,8 +235,8 @@ public class MemberController {
 	// 전화번호 변경 메서드
 	private void changePhone() throws Exception{
 		Connection conn = JDBCTemplate.getConn();
-		System.out.print("바꿀 전화번호 입력 : ");
-		String phone = util.JDBCTemplate.SC.nextLine();
+		System.out.print("바꿀 전화번호 입력: ");
+		String phone = JDBCTemplate.SC.nextLine();
 		
 		String sql = "UPDATE MEMBER SET PHONE = ? WHERE MEMBER_NO = ?";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -245,8 +261,8 @@ public class MemberController {
 	private void quit() throws Exception {
 		// CONN
 		Connection conn = JDBCTemplate.getConn();
-		System.out.println("탈퇴하시겠습니까? (Y/N)");
-		String answer = util.JDBCTemplate.SC.nextLine();
+		System.out.print("탈퇴하시겠습니까? (Y/N)");
+		String answer = JDBCTemplate.SC.nextLine();
 		if (answer.equals("N")) {
 			return;
 		} else if (answer.equals("Y")) {

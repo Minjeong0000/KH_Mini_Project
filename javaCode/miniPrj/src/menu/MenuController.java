@@ -22,7 +22,7 @@ public class MenuController {
 			System.out.println("3. 상품");
 			
 			System.out.print("메뉴 번호 입력: ");
-			String num = util.JDBCTemplate.SC.nextLine();
+			String num = JDBCTemplate.SC.nextLine();
 			
 			switch(num) {
 			case "0": System.out.println("뒤로가기");; return;
@@ -66,7 +66,7 @@ public class MenuController {
 			mcList.add(mc);
 		}
 		
-		System.out.println("------------------------------");
+		System.out.println("=========== 음료 메뉴 ===========");
 		System.out.print("메뉴번호");
 		System.out.print(" | ");
 		System.out.print("메뉴명");
@@ -77,6 +77,7 @@ public class MenuController {
 		System.out.print(" | ");
 		System.out.print("재고");
 		System.out.println();
+		System.out.println("------------------------------");
 		for (BeverageVo x: mcList) {
 			System.out.print(x.getBevNo());
 			System.out.print(" | ");
@@ -89,11 +90,12 @@ public class MenuController {
 			System.out.print(x.getBevStock());
 			System.out.println();
 		}
-		System.out.println("------------------------------");
+		System.out.println("==============================");
 		
+		System.out.println("===== 메뉴 주문 =====");
 		System.out.println("(0을 입력하면 뒤로가기)");
 		System.out.print("주문할 메뉴 번호 입력: ");
-		int select = Integer.parseInt(util.JDBCTemplate.SC.nextLine());
+		int select = Integer.parseInt(JDBCTemplate.SC.nextLine());
 
 		if(select == 0) {
 			return ;
@@ -104,7 +106,6 @@ public class MenuController {
 		for (BeverageVo x: mcList) {
 			if(cnt == select) {
 				Main.selectBeverage = x;
-				System.out.println(Main.selectBeverage);
 				cc.beverageCart(Main.selectBeverage.getBevNo());
 				return ;
 			}
@@ -143,8 +144,7 @@ public class MenuController {
 			
 			mcList.add(mc);
 		}
-		
-		System.out.println("------------------------------");
+		System.out.println("=========== 음식 메뉴 ===========");
 		System.out.print("메뉴번호");
 		System.out.print(" | ");
 		System.out.print("메뉴명");
@@ -155,6 +155,7 @@ public class MenuController {
 		System.out.print(" | ");
 		System.out.print("재고");
 		System.out.println();
+		System.out.println("------------------------------");
 		for (FoodVo x: mcList) {
 			System.out.print(x.getFoodNo());
 			System.out.print(" | ");
@@ -167,11 +168,10 @@ public class MenuController {
 			System.out.print(x.getFoodStock());
 			System.out.println();
 		}
-		System.out.println("------------------------------");
-		
+		System.out.println("==============================");
 		System.out.println("(0을 입력하면 뒤로가기)");
 		System.out.print("주문할 메뉴 번호 입력: ");
-		int select = Integer.parseInt(util.JDBCTemplate.SC.nextLine());
+		int select = Integer.parseInt(JDBCTemplate.SC.nextLine());
 
 		if(select == 0) {
 			return ;
@@ -182,7 +182,6 @@ public class MenuController {
 		for (FoodVo x: mcList) {
 			if(cnt == select) {
 				Main.selectFood = x;
-				System.out.println(Main.selectFood);
 				cc.foodCart(Main.selectFood.getFoodNo());
 				return ;
 			}
@@ -222,7 +221,7 @@ public class MenuController {
 			mcList.add(mc);
 		}
 		
-		System.out.println("------------------------------");
+		System.out.println("=========== 상품 메뉴 ===========");
 		System.out.print("메뉴번호");
 		System.out.print(" | ");
 		System.out.print("메뉴명");
@@ -233,6 +232,7 @@ public class MenuController {
 		System.out.print(" | ");
 		System.out.print("재고");
 		System.out.println();
+		System.out.println("------------------------------");
 		for (MerchandiseVo x: mcList) {
 			System.out.print(x.getMdNo());
 			System.out.print(" | ");
@@ -245,11 +245,10 @@ public class MenuController {
 			System.out.print(x.getMdStock());
 			System.out.println();
 		}
-		System.out.println("------------------------------");
-		
+		System.out.println("==============================");
 		System.out.println("(0을 입력하면 뒤로가기)");
 		System.out.print("주문할 메뉴 번호 입력: ");
-		int select = Integer.parseInt(util.JDBCTemplate.SC.nextLine());
+		int select = Integer.parseInt(JDBCTemplate.SC.nextLine());
 		
 		if(select == 0) {
 			return ;
@@ -260,7 +259,6 @@ public class MenuController {
 		for (MerchandiseVo x: mcList) {
 			if(cnt == select) {
 				Main.selectMerchandise = x;
-				System.out.println(Main.selectMerchandise);
 				cc.mdCart(Main.selectMerchandise.getMdNo());
 				return ;
 			}

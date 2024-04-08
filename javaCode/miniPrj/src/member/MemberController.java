@@ -104,6 +104,7 @@ public class MemberController {
 	}
 
 	public void printMenuAfterLogin() throws Exception {
+		System.out.println("============== MEMBER =============");
 		System.out.println("0. 뒤로가기");
 		System.out.println("1. 비밀번호 변경");
 		System.out.println("2. 주소 변경");

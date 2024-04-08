@@ -276,6 +276,7 @@ public class MemberController {
 				return;
 			}
 			System.out.println("회원탈퇴 성공");
+			Main.loginMember = null;
 			conn.commit();
 
 		} else {
